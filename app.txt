@@ -1,0 +1,59 @@
+import React from "react"
+import ReactDOM  from "react-dom/client";
+
+
+const heading = React.createElement("h1", {id: "heading"}, "hello hritik i'm here")
+
+
+const jsxElement3 =  (
+    <div>  <h2 id="heading" >"hellos hritik i'm here"</h2> 
+      <h1>"hello hritik jaat i'm here"</h1>
+  </div> ,
+      <h3>"ritik  i'm here"</h3>  // it is object 
+)
+
+// React Element
+const jsxElement =  (
+       <div>  <h2 id="heading" >"hellos hritik i'm here"</h2> 
+         <h1>"hello hritik jaat i'm here"</h1>
+     </div> ,
+         <h3>"ritik  i'm here"  {jsxElement3}</h3>  // it is object 
+      //   {jsxElement3}
+  )
+
+ const Title = () => (
+    
+    <div> <h2 className="hello"> "hello this is title component" </h2> </div> 
+    
+ )
+ 
+  // React functional component
+const Head = () => {
+    return(
+        <div className="hel">
+            <h1 className="kel">
+                "hello this is functional components"
+               <Title />
+               {jsxElement}
+            </h1>
+          <Title /> 
+          {jsxElement}
+          {Title()}  
+        </div>
+    )
+}
+
+const jsxElement2 =  (
+    <div>  <h2 id="heading" >"hellos hritik i'm here"</h2> 
+      <h1>"hello hritik jaat i'm here"</h1>
+      <Head />
+  </div> , 
+    //  <h1>"hello ritik  i'm here"</h1>  // it is object 
+)
+
+   const root = ReactDOM.createRoot(document.getElementById("roots"));
+
+//  root.render(<Head />)
+   root.render(jsxElement2);
+
+ 
