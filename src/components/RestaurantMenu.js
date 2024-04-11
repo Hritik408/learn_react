@@ -1,28 +1,17 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
-import { MENU_URL } from "../utils/constants";
+// import { MENU_URL } from "../utils/constants";
+import { CLOUDINARY_URL } from "../utils/constants";
+import useRestaurantMenu from "../utils/useRestaurantMenu";
+import RestaurantCategory from "./RestaurantCategory";
 
 const RestaurantMenu = () => {
 
-    const [resInfo, setresInfo] = useState(null);
+    const {resId} = useParams();
 
-    const {resId} = useParams();   
- //   In React, the useParams hook is part of the React Router library and is used to access parameters from the URL in a React component.
+    const resInfo = useRestaurantMenu(resId);
 
-    console.log(resId)
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async () => {
-    const data = await fetch(MENU_URL + resId)
-     
-     const json = await data?.json();
-     console.log(json);
-     setresInfo(json?.data);
-    }
 
     if(resInfo === null) return <Shimmer />
 
@@ -30,27 +19,25 @@ const RestaurantMenu = () => {
 
     const {itemCards} = resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card;
 
-      console.log(itemCards);
-    // const{id} = itemCards[0]?.card?.info;
+      console.log(resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards);
 
+      const categories = resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter((c) =>
+       c?.card?.card?.["@type"] === 
+        "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
+      )
 
+    //   console.log(categories)
 
     return  (
         <div>
-            <h1>{name}</h1> 
-            <h1>{cuisines.join(", ")}</h1> 
-             <img src={"https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/" 
-            + cloudinaryImageId} className="cloudImg"/>
-            
-            <h1>Menu</h1>
-
-            {itemCards.map((item) => (
-                <li key={item.card.info.id}>{item.card.info.name} - Rs.{item?.card?.info?.price/100 || item.card.info.defaultPrice/100}</li>
-            ))}
-            
-
+            <h1 className="text-center font-bold my-7 text-xl">{name}</h1> 
+            <h1 className="text-center font-semibold my-3">{cuisines.join(", ")}</h1> 
+             {/* <img src={CLOUDINARY_URL + cloudinaryImageId} className="h-52 w-48"/> */}
+                   {/* categories accordians */}
+                  { categories.map((cat) => (
+                    <RestaurantCategory  data = {cat?.card?.card}/>
+                   ))}
            
-
         </div>
     )
 }
@@ -59,3 +46,10 @@ export default RestaurantMenu;
 
 // Q.why line 20 not written with return ? 
 // ans. bcz if we write then initially we put something inside resInfo which is null 
+
+
+  {/* <h1>Menu</h1>
+
+            {itemCards.map((item) => (
+                <li key={item.card.info.id}> {item.card.info.name} - Rs.{item?.card?.info?.price/100 || item.card.info.defaultPrice/100} </li>
+            ))} */}

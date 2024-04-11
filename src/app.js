@@ -1,4 +1,4 @@
-import React from "react"
+import React, { lazy, Suspense } from "react"
 import ReactDOM  from "react-dom/client";
 import Header from "./components/Header";
 import Body from "./components/Body";
@@ -7,16 +7,15 @@ import About from "./components/About";
 import Contact from "./components/Contact";
 import Error from "./components/Error";
 import RestaurantMenu from "./components/RestaurantMenu";
+import Cart from "./components/Cart";
+
+const Grocery = lazy(() => import("./components/Grocery"));
 
 const AppLayout = () => {
     return (
         <div className="app">
-            {/* <div><Header /></div> */}
-            {/* <div><Body /></div> */}
-
             <Header />
             <Outlet />  
-            {/* outlet is filled with children which are below as element */}
         </div>
     );
 };
@@ -43,18 +42,18 @@ const app = createBrowserRouter([   // inside the array are configurations
              path: "/restaurants/:resId",  // ":" is used for different id without this it will not work
              element: <RestaurantMenu />,
             },
+            {
+                path: "/cart",
+                element: <Cart />,
+                errorElement: <Error />,
+            },
+            {
+                path: "/grocery",
+                element:<Suspense fallback = {<h1>Loading....</h1>}> <Grocery /></Suspense>,
+            }
         ],
        errorElement: <Error />,
     },
-    // {
-    //     path: "/about",
-    //     element: <About />,
-    //     errorElement: <Error />,
-    // },
-    // {
-    //     path: "/contact",
-    //     element: <Contact />,
-    // },
 ]);
 
  const root = ReactDOM.createRoot(document.getElementById("roots"));
