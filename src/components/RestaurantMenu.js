@@ -2,7 +2,7 @@
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
 // import { MENU_URL } from "../utils/constants";
-import { CLOUDINARY_URL } from "../utils/constants";
+// import { CLOUDINARY_URL } from "../utils/constants";
 import useRestaurantMenu from "../utils/useRestaurantMenu";
 import RestaurantCategory from "./RestaurantCategory";
 
@@ -10,23 +10,23 @@ const RestaurantMenu = () => {
 
     const {resId} = useParams();
 
-    const resInfo = useRestaurantMenu(resId);
+    const resInfo = useRestaurantMenu(resId);  // useRestMenu provides the data of the whole page which are required
 
 
     if(resInfo === null) return <Shimmer />
 
      const {name, cuisines, cloudinaryImageId} = resInfo?.cards[2]?.card?.card?.info;
 
-    const {itemCards} = resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card;
+    // const {itemCards} = resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card;
 
-      console.log(resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards);
+      // console.log(resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards);
 
-      const categories = resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter((c) =>
+      const categories = resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter((c) => (
        c?.card?.card?.["@type"] === 
-        "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
+        "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory" )
       )
 
-    //   console.log(categories)
+       console.log(categories)
 
     return  (
         <div>
@@ -34,8 +34,8 @@ const RestaurantMenu = () => {
             <h1 className="text-center font-semibold my-3">{cuisines.join(", ")}</h1> 
              {/* <img src={CLOUDINARY_URL + cloudinaryImageId} className="h-52 w-48"/> */}
                    {/* categories accordians */}
-                  { categories.map((cat) => (
-                    <RestaurantCategory  data = {cat?.card?.card}/>
+                  { categories.map((categri) => (
+                    <RestaurantCategory key={categri.card.card.title}  data = {categri?.card?.card}/>
                    ))}
            
         </div>
