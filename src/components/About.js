@@ -1,5 +1,6 @@
 import { Component } from "react"
 import UserClass from "./UserClass"
+import UserContext from "../utils/UserContext";
 
 // const About = () => {
 //     return (  // it returs some peice of jsx
@@ -30,6 +31,11 @@ class About extends Component {
                  <h1>
                  Welcome to our AboutClass page 
                  </h1>
+
+           <UserContext.Consumer>
+            {({loggedInfo}) => <h1 className="font-serif bg-red-50">{loggedInfo}</h1>}
+           </UserContext.Consumer>
+
           <UserClass name = {"Hritik (class)"} location = {"Modinagar"}/>
           {/* <UserClass name = {"Elon (class)"} location = {"US"}/> */}
              </div>

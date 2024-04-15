@@ -1,8 +1,10 @@
 import RestaurantCard from "./RestaurantCard"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import Shimmer from "./Shimmer"
 import { Link } from "react-router-dom"
 import useOnlineStatus from "../utils/useOnlineStatus"
+import { REST_URl } from "../utils/constants"
+import UserContext from "../utils/UserContext"
 // import { LIST_REST_URL } from "../utils/constants"
 
 const Body = () => {
@@ -12,12 +14,10 @@ const Body = () => {
   const[listofRestaurants, setlistofRestaurants] = useState([]);
 
   const [searchText, setsearchText ]  = useState("")
-
   // const RestoVeg = withVegLabel(RestaurantCard);
   // const RestaurantCardPromoted = withPromotedCard(RestaurantCard);
 
 
-   console.log(listofRestaurants);
 
    useEffect(() => {
        fetchdata();
@@ -25,8 +25,8 @@ const Body = () => {
 
   
    const fetchdata = async () => {
-       const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=19.0759837&lng=72.8776559&is-seo-homepage-enabled=true&page_type=https://www.swiggy.com/dapi/restaurants/list/v5?lat=30.3164945&lng=78.03219179999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING");
-           const json = await data.json();
+       const data = await fetch(REST_URl)
+         const json = await data.json();
            console.log(json); 
            setfilterRestro(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
            setlistofRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
@@ -36,6 +36,8 @@ const Body = () => {
 
           if(!status) 
           return( <h1>  You looks like offline please check internet connection !!! </h1> )
+
+          if(listofRestaurants.length === 0)  return <Shimmer />
 
 
             const search = () => {
@@ -52,17 +54,18 @@ const Body = () => {
               setfilterRestro(filterresLists);
             }
 
-    
+       const {logInfo, setuserName} = useContext(UserContext);
 
-    return  (listofRestaurants.length === 0) ? <Shimmer /> : (
+    // return (listofRestaurants.length === 0) ? <Shimmer /> :  (
+      return (
 
-        <div className="body">
+        <div className="bg-violet-100">
 
             <div className="flex m-4 ">
 
               <div className="search">
                 <input type="text"
-                 className="bg-pink-100 rounded-md mr-2" 
+                 className="bg-gray-300 rounded-md mr-2" 
                  placeholder="Search Restaurant"
                  value={searchText}
                  onChange={(e) => (   
@@ -77,8 +80,15 @@ const Body = () => {
                 onClick={rating}  
                 >Top Rated Restaurants</button> 
 
+            <div>
+              <label className="pr-3">userName:</label>              
+              <input className= "border-black border pl-2 rounded-lg" 
+              value={logInfo}
+              onChange={(e) => setuserName(e.target.value)}
+              />
             </div>
 
+            </div>
 
             <div className="flex flex-wrap" > 
            {
